@@ -25,13 +25,26 @@ namespace CodingChallenge.Tests.PaycheckTestContainer
 
                 Assert.AreEqual(expected, actual);
             }
+
+            [TestMethod]
+            public void EmployeeSoloWithAName()
+            {
+                var something = new Something(new Employee("Atticus", GrossWagesPerPayPeriod));
+                var paycheckAmount = something.GetPaycheckAmount();
+
+                var expected = new Currency(1965.384615384615M).Amount;
+                var actual = new Currency(paycheckAmount).Amount;
+
+                Assert.AreEqual(expected, actual);
+            }
         }
     }
 
     public class Something
     {
-        private const decimal BenefitDeductionAmountPerYear = 1000M;
+        private const decimal BaseBenefitDeductionAmountPerYear = 1000M;
         private const decimal NumberOfPaychecksPerYear = 26M;
+        private const decimal DiscountAmountForNameBeginningWithA = .1M;
 
         private readonly Employee _employee;
 
@@ -47,7 +60,11 @@ namespace CodingChallenge.Tests.PaycheckTestContainer
 
         private decimal GetCostOfBenefitsPerPaycheck()
         {
-            return BenefitDeductionAmountPerYear/NumberOfPaychecksPerYear;
+            var discountMultiplier = _employee.Name.StartsWith("a",StringComparison.CurrentCultureIgnoreCase) 
+                ? 1 - DiscountAmountForNameBeginningWithA 
+                : 1;
+
+            return BaseBenefitDeductionAmountPerYear * discountMultiplier / NumberOfPaychecksPerYear;
         }
     }
 }
