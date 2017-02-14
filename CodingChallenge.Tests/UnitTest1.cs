@@ -54,6 +54,19 @@ namespace CodingChallenge.Tests.PaycheckTestContainer
 
                 BaseTest(employee, amount);
             }
+
+
+            [TestMethod]
+            public void EmployeeWithOneANameDependent()
+            {
+                const decimal amount = 1944.23076923077M;
+                var employee = new Employee(
+                                   "Erick",
+                                   GrossWagesPerPayPeriod,
+                                   new Dependent("Arbuckle"));
+
+                BaseTest(employee, amount);
+            }
         }
     }
 
@@ -78,19 +91,19 @@ namespace CodingChallenge.Tests.PaycheckTestContainer
 
         private decimal GetCostOfBenefitsPerPaycheckForEmployee()
         {
-            return GetCostOfBenefitsPerPaycheck(EmployeeDeductionPerYear);
+            return GetCostOfBenefitsPerPaycheck(EmployeeDeductionPerYear, _employee.Name);
         }
 
         private decimal GetCostOfBenefitsPerPaycheckForDependent()
         {
             return _employee.Dependent != null 
-                ? GetCostOfBenefitsPerPaycheck(DependentDeductionPerYear) 
+                ? GetCostOfBenefitsPerPaycheck(DependentDeductionPerYear, _employee.Dependent.Name) 
                 : 0;
         }
 
-        private decimal GetCostOfBenefitsPerPaycheck(decimal deductionPerYear)
+        private decimal GetCostOfBenefitsPerPaycheck(decimal deductionPerYear, string name)
         {
-            var discountMultiplier = _employee.Name.StartsWith("a", StringComparison.CurrentCultureIgnoreCase)
+            var discountMultiplier = name.StartsWith("a", StringComparison.CurrentCultureIgnoreCase)
                 ? 1 - DiscountAmountForNameBeginningWithA
                 : 1;
 
