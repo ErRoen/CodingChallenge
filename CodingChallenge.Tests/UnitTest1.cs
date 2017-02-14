@@ -42,14 +42,27 @@ namespace CodingChallenge.Tests.PaycheckTestContainer
 
                 BaseTest(employee, amount);
             }
+
+            [TestMethod]
+            public void EmployeeWithOneDependent()
+            {
+                const decimal amount = 1942.307692307693M;
+                var employee = new Employee(
+                                   "Erick",
+                                   GrossWagesPerPayPeriod,
+                                   new Dependent("Frances"));
+
+                BaseTest(employee, amount);
+            }
         }
     }
 
     public class Something
     {
-        private const decimal BaseBenefitDeductionAmountPerYear = 1000M;
-        private const decimal NumberOfPaychecksPerYear = 26M;
+        private const decimal EmployeeDeductionPerYear = 1000M;
+        private const decimal PaychecksPerYear = 26M;
         private const decimal DiscountAmountForNameBeginningWithA = .1M;
+        private const decimal DependentDeductionPerYear = 500M;
 
         private readonly Employee _employee;
 
@@ -60,16 +73,28 @@ namespace CodingChallenge.Tests.PaycheckTestContainer
 
         public decimal GetPaycheckAmount()
         {
-            return _employee.GrossPaycheckAmount - GetCostOfBenefitsPerPaycheck();
+            return _employee.GrossPaycheckAmount - GetCostOfBenefitsPerPaycheckForEmployee() - GetCostOfBenefitsPerPaycheckForDependent();
         }
 
-        private decimal GetCostOfBenefitsPerPaycheck()
+        private decimal GetCostOfBenefitsPerPaycheckForEmployee()
         {
-            var discountMultiplier = _employee.Name.StartsWith("a",StringComparison.CurrentCultureIgnoreCase) 
-                ? 1 - DiscountAmountForNameBeginningWithA 
+            return GetCostOfBenefitsPerPaycheck(EmployeeDeductionPerYear);
+        }
+
+        private decimal GetCostOfBenefitsPerPaycheckForDependent()
+        {
+            return _employee.Dependent != null 
+                ? GetCostOfBenefitsPerPaycheck(DependentDeductionPerYear) 
+                : 0;
+        }
+
+        private decimal GetCostOfBenefitsPerPaycheck(decimal deductionPerYear)
+        {
+            var discountMultiplier = _employee.Name.StartsWith("a", StringComparison.CurrentCultureIgnoreCase)
+                ? 1 - DiscountAmountForNameBeginningWithA
                 : 1;
 
-            return BaseBenefitDeductionAmountPerYear * discountMultiplier / NumberOfPaychecksPerYear;
+            return deductionPerYear * discountMultiplier / PaychecksPerYear;
         }
     }
 }
