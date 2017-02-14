@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.UI.WebControls;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -38,7 +39,7 @@ namespace CodingChallenge.Tests.PaycheckTestContainer
             public void EmployeeSoloWithAName()
             {
                 const decimal amount = 1965.384615384615M;
-                var employee = new Employee("Atticus", GrossWagesPerPayPeriod);
+                var employee = new Employee("Arbuckle", GrossWagesPerPayPeriod);
 
                 BaseTest(employee, amount);
             }
@@ -47,10 +48,8 @@ namespace CodingChallenge.Tests.PaycheckTestContainer
             public void EmployeeWithOneDependent()
             {
                 const decimal amount = 1942.307692307693M;
-                var employee = new Employee(
-                                   "Erick",
-                                   GrossWagesPerPayPeriod,
-                                   new Dependent("Frances"));
+                var employee = new Employee("Erick", GrossWagesPerPayPeriod);
+                employee.Dependents.Add(new Dependent("Frances"));
 
                 BaseTest(employee, amount);
             }
@@ -60,10 +59,35 @@ namespace CodingChallenge.Tests.PaycheckTestContainer
             public void EmployeeWithOneANameDependent()
             {
                 const decimal amount = 1944.23076923077M;
-                var employee = new Employee(
-                                   "Erick",
-                                   GrossWagesPerPayPeriod,
-                                   new Dependent("Arbuckle"));
+                var employee = new Employee("Erick", GrossWagesPerPayPeriod);
+                employee.Dependents.Add(new Dependent("Arbuckle"));
+
+                BaseTest(employee, amount);
+            }
+
+            [TestMethod]
+            public void EmployeeWithManyDependents()
+            {
+                const decimal amount = 1884.615385M;
+                var employee = new Employee("Erick", GrossWagesPerPayPeriod);
+                employee.Dependents.Add(new Dependent("Frances"));
+                employee.Dependents.Add(new Dependent("Christian"));
+                employee.Dependents.Add(new Dependent("Harry"));
+                employee.Dependents.Add(new Dependent("Olive"));
+
+                BaseTest(employee, amount);
+            }
+
+            [TestMethod]
+            public void EmployeeWithMixNamedDependents()
+            {
+                const decimal amount = 1867.307692M;
+                var employee = new Employee("Erick", GrossWagesPerPayPeriod);
+                employee.Dependents.Add(new Dependent("Frances"));
+                employee.Dependents.Add(new Dependent("Christian"));
+                employee.Dependents.Add(new Dependent("Arbuckle"));
+                employee.Dependents.Add(new Dependent("Harry"));
+                employee.Dependents.Add(new Dependent("Olive"));
 
                 BaseTest(employee, amount);
             }
@@ -86,7 +110,9 @@ namespace CodingChallenge.Tests.PaycheckTestContainer
 
         public decimal GetPaycheckAmount()
         {
-            return _employee.GrossPaycheckAmount - GetCostOfBenefitsPerPaycheckForEmployee() - GetCostOfBenefitsPerPaycheckForDependent();
+            return _employee.GrossPaycheckAmount 
+                - GetCostOfBenefitsPerPaycheckForEmployee() 
+                - GetCostOfBenefitsPerPaycheckForDependents();
         }
 
         private decimal GetCostOfBenefitsPerPaycheckForEmployee()
@@ -94,11 +120,10 @@ namespace CodingChallenge.Tests.PaycheckTestContainer
             return GetCostOfBenefitsPerPaycheck(EmployeeDeductionPerYear, _employee.Name);
         }
 
-        private decimal GetCostOfBenefitsPerPaycheckForDependent()
+        private decimal GetCostOfBenefitsPerPaycheckForDependents()
         {
-            return _employee.Dependent != null 
-                ? GetCostOfBenefitsPerPaycheck(DependentDeductionPerYear, _employee.Dependent.Name) 
-                : 0;
+            return _employee.Dependents
+                .Sum(d => GetCostOfBenefitsPerPaycheck(DependentDeductionPerYear, d.Name));
         }
 
         private decimal GetCostOfBenefitsPerPaycheck(decimal deductionPerYear, string name)
