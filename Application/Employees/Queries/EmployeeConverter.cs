@@ -1,4 +1,5 @@
-﻿using CodingChallenge.Application.Interfaces;
+﻿using System.Linq;
+using CodingChallenge.Application.Interfaces;
 using CodingChallenge.Domain;
 
 namespace CodingChallenge.Application.Employees.Queries
@@ -7,7 +8,7 @@ namespace CodingChallenge.Application.Employees.Queries
     {
         public static EmployeeModel CreateEmployeeModel(Employee e, IDatabaseService databaseService)
         {
-            // Could use AutoMapper in larger projects to save time.
+            // Could use AutoMapper.
             return new EmployeeModel()
                    {
                        Id = e.Id,
@@ -25,6 +26,28 @@ namespace CodingChallenge.Application.Employees.Queries
                        employee,
                        databaseService.BenefitsData)
                 .CalculatePaycheckAmount();
+        }
+
+        public static Employee CreateEmployee(EmployeeModel employeeModel, IDatabaseService databaseService)
+        {
+            var benefitsData = databaseService.BenefitsData;
+            var grossWagesPerPayPeriod = benefitsData.GrossWagesPerPayPeriod;
+            var annualBenefitCostForEmployee = benefitsData.AnnualBenefitCostForEmployee;
+
+            var dependents = employeeModel.Dependents
+                .Select(d =>
+                            new Dependent(
+                                d.Name,
+                                benefitsData.AnnualBenefitCostForDependent))
+                .ToList();
+
+            return new Employee(
+                       employeeModel.Name,
+                       grossWagesPerPayPeriod,
+                       annualBenefitCostForEmployee)
+                   {
+                       Dependents = dependents
+                   };
         }
     }
 }

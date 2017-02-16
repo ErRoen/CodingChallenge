@@ -24,6 +24,15 @@ namespace CodingChallenge.Persistence
             Employees = CreateEmployees();
         }
 
+        private static BenefitsData CreateBenefitsData()
+        {
+            return new BenefitsData
+            {
+                DiscountAmountForNameBeginningWithA = DiscountAmountForNameBeginningWithA,
+                PaychecksPerYear = PaychecksPerYear
+            };
+        }
+
         private List<Employee> CreateEmployees()
         {
             return new List<Employee>
@@ -51,15 +60,6 @@ namespace CodingChallenge.Persistence
             return names
                 .Select(name => new Dependent(name, AnnualBenefitCostForDependent))
                 .ToList();
-        }
-
-        private static BenefitsData CreateBenefitsData()
-        {
-            return new BenefitsData
-                   {
-                       DiscountAmountForNameBeginningWithA = DiscountAmountForNameBeginningWithA,
-                       PaychecksPerYear = PaychecksPerYear
-                   };
         }
 
     }
