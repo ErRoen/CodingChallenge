@@ -42,6 +42,10 @@
   <ItemGroup>
     <Compile Include="Benefits\Queries\GetBenefitsDataQuery.cs" />
     <Compile Include="Benefits\Queries\IGetBenefitsDataQuery.cs" />
+    <Compile Include="Employees\Queries\DependentConverter.cs" />
+    <Compile Include="Employees\Queries\DependentModel.cs" />
+    <Compile Include="Employees\Queries\EmployeeConverter.cs" />
+    <Compile Include="Employees\Queries\EmployeeModel.cs" />
     <Compile Include="Employees\Queries\GetEmployeeListQuery.cs" />
     <Compile Include="Employees\Queries\GetEmployeeQuery.cs" />
     <Compile Include="Employees\Queries\IGetEmployeeListQuery.cs" />

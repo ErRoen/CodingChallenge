@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using CodingChallenge.Application.Interfaces;
-using CodingChallenge.Domain;
 
 namespace CodingChallenge.Application.Employees.Queries
 {
@@ -13,9 +12,11 @@ namespace CodingChallenge.Application.Employees.Queries
             _databaseService = databaseService;
         }
 
-        public Employee Execute(int id)
+        public EmployeeModel Execute(int id)
         {
-            return _databaseService.Employees.SingleOrDefault(e => e.Id == id);
+            return _databaseService.Employees
+                .Select(e => EmployeeConverter.CreateEmployeeModel(e, _databaseService))
+                .SingleOrDefault(e => e.Id == id);
         }
     }
 }

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using CodingChallenge.Domain;
+﻿using System.Collections.Generic;
 
 namespace CodingChallenge.Application.Employees.Queries
 {
     public interface IGetEmployeeListQuery
     {
-        List<Employee> Execute();
+        List<EmployeeModel> Execute();
     }
 }

@@ -1,0 +1,75 @@
+﻿@using CodingChallenge.Common
+@model CodingChallenge.Application.Employees.Queries.EmployeeModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Employee Details - @Model.Name</h2>
+
+<div>
+    <h4>Coworker</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+            @( (Model.Name.BeginsWithA()) ? "*" : "" )
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GrossPaycheck)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.GrossPaycheck)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AnnualBenefitCost)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AnnualBenefitCost)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Dependents)
+        </dt>
+        <dd>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(modelItem => modelItem.Dependents[0].Name)</th>
+                    <th>@Html.DisplayNameFor(modelItem => modelItem.Dependents[0].AnnualBenefitCost)</th>
+                </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Dependents)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(m => item.Name)
+                            @((item.Name.BeginsWithA()) ? "*" : "")
+                        </td>
+                        <td>@Html.DisplayFor(m => item.AnnualBenefitCost)</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </dd>
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NetPaycheck)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NetPaycheck)
+        </dd>
+
+    </dl>
+    <span>* - 10% Deduction for name that begins with A</span>
+</div>
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>

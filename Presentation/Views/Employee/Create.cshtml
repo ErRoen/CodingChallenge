@@ -1,0 +1,68 @@
+﻿@model CodingChallenge.Application.Employees.Queries.EmployeeModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Employee</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Dependents, new { @class = "control-label col-md-2" })
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    <a href="#" onclick="AddDependentRow()">Add Dependent</a>
+                </div>
+                @Html.Label("Names", htmlAttributes: new { @class = "control-label col-md-1" })
+                <div class="col-md-9"></div>
+            </div>
+            <div id="DependentsBlock">
+                <div class="col-md-2"></div>
+                <div class="col-md-10">
+                    <input type="text" id="dependents[0].Name" name="dependents[0].Name" class="form-control" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="RowTemplate" style="display: none">
+        <div class="col-md-2"></div>
+        <div class="col-md-10">
+            <input type="text" id="dependents[REPLACE_ID].Name" name="dependents[REPLACE_ID].Name" class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/Scripts/AddDependentRow.js")
+    @Scripts.Render("~/bundles/jqueryval")
+}

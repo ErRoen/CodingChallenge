@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using CodingChallenge.Application.Interfaces;
 using CodingChallenge.Domain;
 
@@ -13,9 +14,11 @@ namespace CodingChallenge.Application.Employees.Queries
             _databaseService = databaseService;
         }
 
-        List<Employee> IGetEmployeeListQuery.Execute()
+        List<EmployeeModel> IGetEmployeeListQuery.Execute()
         {
-            return _databaseService.Employees;
+            return _databaseService.Employees
+                .Select(e => EmployeeConverter.CreateEmployeeModel(e,_databaseService))
+                .ToList();
         }
     }
 }
