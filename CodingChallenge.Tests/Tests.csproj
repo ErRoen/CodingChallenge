@@ -84,10 +84,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Currency.cs" />
-    <Compile Include="Employee.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Controllers\HomeControllerTest.cs" />
     <Compile Include="UnitTest1.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -97,10 +94,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CodingChallenge\CodingChallenge.csproj">
-      <Project>{87712D95-652F-4AB3-9ABA-4782A20C0BF2}</Project>
-      <Name>CodingChallenge</Name>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{abe7a346-15ac-45d2-b4a0-4395f2a7e942}</Project>
+      <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Domain\Domain.csproj">
+      <Project>{4208901F-AAB3-4608-A518-122DEA5960CC}</Project>
+      <Name>Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Concrete\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

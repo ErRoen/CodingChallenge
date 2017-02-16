@@ -1,9 +1,10 @@
-﻿namespace CodingChallenge.Tests.PaycheckTestContainer
+﻿namespace CodingChallenge.Common
 {
     /// <summary>
-    /// Exists to provide consistent rounding logic
+    /// Exists to provide consistent money logic (ex: rounding, formatting)
+    /// https://martinfowler.com/eaaCatalog/money.html
     /// </summary>
-    public class Currency
+    public class Money
     {
         private decimal _amount;
         // Could add currency type here too: $, £, €, etc...
@@ -14,14 +15,19 @@
             set { _amount = decimal.Round(value, 2); }
         }
 
-        public Currency(decimal amount)
+        public Money(decimal amount)
         {
             Amount = amount;
         }
 
-        public Currency(int amount)
+        public Money(int amount)
         {
             Amount = amount;
+        }
+
+        public override string ToString()
+        {
+            return _amount.ToString("C");
         }
     }
 }
