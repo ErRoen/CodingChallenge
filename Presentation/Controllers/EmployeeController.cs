@@ -11,19 +11,11 @@ namespace CodingChallenge.Presentation.Controllers
         private readonly IGetEmployeeQuery _employeeQuery;
         private readonly ICreateEmployeeCommand _createEmployeeCommand;
 
-        public EmployeeController(IGetEmployeeListQuery getEmployeeListQuery, IGetEmployeeQuery getEmployeeQuery)
+        public EmployeeController(IGetEmployeeListQuery getEmployeeListQuery, IGetEmployeeQuery getEmployeeQuery, ICreateEmployeeCommand createEmployeeCommand)
         {
             _employeeListQuery = getEmployeeListQuery;
             _employeeQuery = getEmployeeQuery;
-        }
-
-        public EmployeeController()
-        {
-            // ToDo: Implement IoC
-            var databaseService = new DatabaseService();
-            _employeeListQuery = new GetEmployeeListQuery(databaseService);
-            _employeeQuery = new GetEmployeeQuery(databaseService);
-            _createEmployeeCommand = new CreateEmployeeCommand(databaseService);
+            _createEmployeeCommand = createEmployeeCommand;
         }
 
         // GET: Employee
