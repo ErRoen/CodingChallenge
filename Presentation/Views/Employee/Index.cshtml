@@ -21,7 +21,6 @@
         <th>
             @Html.DisplayNameFor(model => model.NetPaycheck)
         </th>
-        <th></th>
     </tr>
     </thead>
     <tbody>
@@ -38,10 +37,15 @@
                     @Html.DisplayFor(modelItem => item.NetPaycheck)
                 </td>
                 <td>
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    @Html.ActionLink("Details", "Details", new { id = item.Id })
                 </td>
             </tr>
         }
+    <tr>
+        <td></td>
+        <td>@Model.Sum(m => m.GrossPaycheck).ToString("C")</td>
+        <td>@Model.Sum(m => m.NetPaycheck).ToString("C")</td>
+        <td></td>
+    </tr>
     </tbody>
 </table>

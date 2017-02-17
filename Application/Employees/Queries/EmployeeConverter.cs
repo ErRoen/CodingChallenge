@@ -8,7 +8,7 @@ namespace CodingChallenge.Application.Employees.Queries
     {
         public static EmployeeModel CreateEmployeeModel(Employee e, IDatabaseService databaseService)
         {
-            // Could use AutoMapper.
+            // Could use AutoMapper in larger projects to save time.
             return new EmployeeModel()
                    {
                        Id = e.Id,
@@ -16,7 +16,10 @@ namespace CodingChallenge.Application.Employees.Queries
                        GrossPaycheck = e.GrossPaycheckAmount,
                        AnnualBenefitCost = e.AnnualBenefitCost,
                        NetPaycheck = GetPaycheckDeduction(e, databaseService),
-                       Dependents = DependentConverter.CreateDependentModel(e.Dependents, databaseService)
+                       Dependents = DependentConverter
+                           .CreateDependentModel(
+                               e.Dependents,
+                               databaseService)
                    };
         }
 

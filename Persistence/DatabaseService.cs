@@ -29,7 +29,10 @@ namespace CodingChallenge.Persistence
             return new BenefitsData
             {
                 DiscountAmountForNameBeginningWithA = DiscountAmountForNameBeginningWithA,
-                PaychecksPerYear = PaychecksPerYear
+                PaychecksPerYear = PaychecksPerYear,
+                GrossWagesPerPayPeriod = GrossWagesPerPayPeriod,
+                AnnualBenefitCostForEmployee = AnnualBenefitCostForEmployee,
+                AnnualBenefitCostForDependent = AnnualBenefitCostForDependent
             };
         }
 
