@@ -16,6 +16,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
+using CodingChallenge.Application.Benefits.Queries;
 using CodingChallenge.Application.Employees.Commands;
 using CodingChallenge.Application.Employees.Queries;
 using CodingChallenge.Application.Interfaces;
@@ -23,9 +24,8 @@ using CodingChallenge.Persistence;
 
 namespace CodingChallenge.Presentation.DependencyResolution {
     using StructureMap;
-
-    public static class IoC
-    {
+	
+    public static class IoC {
         public static IContainer Initialize()
         {
             return
@@ -37,6 +37,7 @@ namespace CodingChallenge.Presentation.DependencyResolution {
                         c.For<IGetEmployeeListQuery>().Use<GetEmployeeListQuery>();
                         c.For<IGetEmployeeQuery>().Use<GetEmployeeQuery>();
                         c.For<ICreateEmployeeCommand>().Use<CreateEmployeeCommand>();
+                        c.For<IGetBenefitsDataQuery>().Use<GetBenefitsDataQuery>();
                     }
                 );
         }

@@ -2,6 +2,8 @@
 {
     public class BenefitsData
     {
+        public int Id { get; set; }
+
         public decimal PaychecksPerYear { get; set; }
 
         public decimal DiscountAmountForNameBeginningWithA { get; set; }

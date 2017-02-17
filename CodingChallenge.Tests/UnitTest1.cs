@@ -32,37 +32,21 @@ namespace CodingChallenge.Tests.PaycheckTestContainer
             var benefitsData = new BenefitsData
                                {
                                    DiscountAmountForNameBeginningWithA = DiscountAmountForNameBeginningWithA,
-                                   PaychecksPerYear = PaychecksPerYear
+                                   PaychecksPerYear = PaychecksPerYear,
+                                   GrossWagesPerPayPeriod = GrossWagesPerPayPeriod,
+                                   AnnualBenefitCostForEmployee = AnnualBenefitCostForEmployee,
+                                   AnnualBenefitCostForDependent = AnnualBenefitCostForDependent
                                };
             var benefitDeductionCalculator = new BenefitDeductionCalculator(employee, benefitsData);
             return benefitDeductionCalculator;
         }
 
-        private Employee CreateEmployee(string name)
-        {
-            return new Employee(
-                name,
-                GrossWagesPerPayPeriod,
-                AnnualBenefitCostForEmployee);
-        }
-
-        private Dependent CreateDependent(string name)
-        {
-            return new Dependent(
-                name,
-                AnnualBenefitCostForDependent);
-        }
-
         private void AddMultipleEmployees(Employee employee)
         {
-            employee.Dependents.AddRange(
-                new List<Dependent>
-                {
-                    CreateDependent("Frances"),
-                    CreateDependent("Christian"),
-                    CreateDependent("Harry"),
-                    CreateDependent("Olive")
-                });
+            employee.Dependents.Add(new Dependent("Frances"));
+            employee.Dependents.Add(new Dependent("Christian"));
+            employee.Dependents.Add(new Dependent("Harry"));
+            employee.Dependents.Add(new Dependent("Olive"));
         }
 
         [TestClass]
@@ -73,7 +57,7 @@ namespace CodingChallenge.Tests.PaycheckTestContainer
             public void EmployeeSolo()
             {
                 const decimal amount = 1961.538461538462M;
-                var employee = CreateEmployee("Erick");
+                var employee = new Employee("Erick");
 
                 BaseTest(employee, amount);
             }
@@ -82,7 +66,7 @@ namespace CodingChallenge.Tests.PaycheckTestContainer
             public void EmployeeSoloWithAName()
             {
                 const decimal amount = 1965.384615384615M;
-                var employee = CreateEmployee("Arbuckle");
+                var employee = new Employee("Arbuckle");
 
                 BaseTest(employee, amount);
             }
@@ -91,8 +75,8 @@ namespace CodingChallenge.Tests.PaycheckTestContainer
             public void EmployeeWithOneDependent()
             {
                 const decimal amount = 1942.307692307693M;
-                var employee = CreateEmployee("Erick");
-                employee.Dependents.Add(CreateDependent("Frances"));
+                var employee = new Employee("Erick");
+                employee.Dependents.Add(new Dependent("Frances"));
 
                 BaseTest(employee, amount);
             }
@@ -102,8 +86,8 @@ namespace CodingChallenge.Tests.PaycheckTestContainer
             public void EmployeeWithOneANameDependent()
             {
                 const decimal amount = 1944.23076923077M;
-                var employee = CreateEmployee("Erick");
-                employee.Dependents.Add(CreateDependent("Arbuckle"));
+                var employee = new Employee("Erick");
+                employee.Dependents.Add(new Dependent("Arbuckle"));
 
                 BaseTest(employee, amount);
             }
@@ -112,7 +96,7 @@ namespace CodingChallenge.Tests.PaycheckTestContainer
             public void EmployeeWithManyDependents()
             {
                 const decimal amount = 1884.615385M;
-                var employee = CreateEmployee("Erick");
+                var employee = new Employee("Erick");
 
                 AddMultipleEmployees(employee);
 
@@ -123,9 +107,9 @@ namespace CodingChallenge.Tests.PaycheckTestContainer
             public void EmployeeWithMixNamedDependents()
             {
                 const decimal amount = 1867.307692M;
-                var employee = CreateEmployee("Erick");
+                var employee = new Employee("Erick");
                 AddMultipleEmployees(employee);
-                employee.Dependents.Add(CreateDependent("Arbuckle"));
+                employee.Dependents.Add(new Dependent("Arbuckle"));
 
                 BaseTest(employee, amount);
             }

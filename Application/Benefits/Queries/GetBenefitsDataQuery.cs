@@ -1,4 +1,5 @@
-﻿using CodingChallenge.Application.Interfaces;
+﻿using System.Linq;
+using CodingChallenge.Application.Interfaces;
 using CodingChallenge.Domain;
 
 namespace CodingChallenge.Application.Benefits.Queries
@@ -13,7 +14,7 @@ namespace CodingChallenge.Application.Benefits.Queries
         }
         public BenefitsData Execute()
         {
-            return _databaseService.BenefitsData;
+            return _databaseService.BenefitsData.SingleOrDefault();
         }
     }
 }

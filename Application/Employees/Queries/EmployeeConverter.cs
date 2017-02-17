@@ -6,48 +6,38 @@ namespace CodingChallenge.Application.Employees.Queries
 {
     public class EmployeeConverter
     {
-        public static EmployeeModel CreateEmployeeModel(Employee e, IDatabaseService databaseService)
+        public static EmployeeModel CreateEmployeeModel(Employee e, BenefitsData benefitsData)
         {
             // Could use AutoMapper in larger projects to save time.
             return new EmployeeModel()
                    {
                        Id = e.Id,
                        Name = e.Name,
-                       GrossPaycheck = e.GrossPaycheckAmount,
-                       AnnualBenefitCost = e.AnnualBenefitCost,
-                       NetPaycheck = GetPaycheckDeduction(e, databaseService),
+                       GrossPaycheck = benefitsData.GrossWagesPerPayPeriod,
+                       AnnualBenefitCost = benefitsData.AnnualBenefitCostForEmployee,
+                       NetPaycheck = GetPaycheckDeduction(e, benefitsData),
                        Dependents = DependentConverter
                            .CreateDependentModel(
                                e.Dependents,
-                               databaseService)
+                               benefitsData)
                    };
         }
 
-        private static decimal GetPaycheckDeduction(Employee employee, IDatabaseService databaseService)
+        private static decimal GetPaycheckDeduction(Employee employee, BenefitsData benefitsData)
         {
             return new BenefitDeductionCalculator(
                        employee,
-                       databaseService.BenefitsData)
+                       benefitsData)
                 .CalculatePaycheckAmount();
         }
 
-        public static Employee CreateEmployee(EmployeeModel employeeModel, IDatabaseService databaseService)
+        public static Employee CreateEmployee(EmployeeModel employeeModel)
         {
-            var benefitsData = databaseService.BenefitsData;
-            var grossWagesPerPayPeriod = benefitsData.GrossWagesPerPayPeriod;
-            var annualBenefitCostForEmployee = benefitsData.AnnualBenefitCostForEmployee;
-
             var dependents = employeeModel.Dependents
-                .Select(d =>
-                            new Dependent(
-                                d.Name,
-                                benefitsData.AnnualBenefitCostForDependent))
+                .Select(d => new Dependent(d.Name))
                 .ToList();
 
-            return new Employee(
-                       employeeModel.Name,
-                       grossWagesPerPayPeriod,
-                       annualBenefitCostForEmployee)
+            return new Employee(employeeModel.Name)
                    {
                        Dependents = dependents
                    };

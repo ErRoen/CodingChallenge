@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using CodingChallenge.Common;
 
 namespace CodingChallenge.Domain
@@ -17,24 +16,26 @@ namespace CodingChallenge.Domain
 
         public decimal CalculatePaycheckAmount()
         {
-            return _employee.GrossPaycheckAmount
+            return _benefitsData.GrossWagesPerPayPeriod
                    - CalculateDeductionForEmployee()
                    - CalculateDeductionForDependents();
         }
 
         private decimal CalculateDeductionForEmployee()
         {
-            return CaculateDeduction(_employee);
+            return CaculateDeduction(_employee, _benefitsData.AnnualBenefitCostForEmployee);
         }
 
         private decimal CalculateDeductionForDependents()
         {
-            return _employee.Dependents.Sum(d => CaculateDeduction(d));
+            return _employee
+                .Dependents
+                .Sum(d => CaculateDeduction(d, _benefitsData.AnnualBenefitCostForDependent));
         }
 
-        private decimal CaculateDeduction(IPerson person)
+        private decimal CaculateDeduction(IPerson person, decimal annualBenefitCost)
         {
-            return person.AnnualBenefitCost 
+            return annualBenefitCost
                 * CalculateDiscount(person.Name) 
                 / _benefitsData.PaychecksPerYear;
         }

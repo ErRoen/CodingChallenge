@@ -6,16 +6,17 @@ namespace CodingChallenge.Domain
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public decimal GrossPaycheckAmount { get; private set; }
-        public decimal AnnualBenefitCost { get; set; }
-        public List<Dependent> Dependents { get; set; }
+        public ICollection<Dependent> Dependents { get; set; }
 
-        public Employee(string name, decimal grossPaycheckAmount, decimal annualBenefitCost)
+        public Employee(string name)
         {
             Name = name;
-            GrossPaycheckAmount = grossPaycheckAmount;
-            AnnualBenefitCost = annualBenefitCost;
             Dependents = new List<Dependent>();
+        }
+
+        public Employee()
+        {
+            
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Web.Mvc;
 using CodingChallenge.Application.Employees.Commands;
 using CodingChallenge.Application.Employees.Queries;
-using CodingChallenge.Persistence;
 
 namespace CodingChallenge.Presentation.Controllers
 {

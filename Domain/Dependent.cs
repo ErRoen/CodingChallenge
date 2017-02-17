@@ -4,12 +4,16 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public decimal AnnualBenefitCost { get; set; }
+        public virtual Employee Employee { get; set; }
 
-        public Dependent(string name, decimal annualBenefitCost)
+        public Dependent(string name)
         {
             Name = name;
-            AnnualBenefitCost = annualBenefitCost;
+        }
+
+        public Dependent()
+        {
+            
         }
     }
 }

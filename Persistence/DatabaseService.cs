@@ -1,69 +1,34 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Data.Entity;
 using CodingChallenge.Application.Interfaces;
 using CodingChallenge.Domain;
+using CodingChallenge.Persistence.Configurations;
 
 namespace CodingChallenge.Persistence
 {
-    public class DatabaseService : IDatabaseService
+    public class DatabaseService : DbContext, IDatabaseService
     {
-        // These const values seem likely to change. Could load at runtime
-        protected const int GrossWagesPerPayPeriod = 2000;
-        private const decimal AnnualBenefitCostForEmployee = 1000M;
-        private const decimal AnnualBenefitCostForDependent = 500M;
-        private const decimal PaychecksPerYear = 26M;
-        private const decimal DiscountAmountForNameBeginningWithA = .1M;
+        public IDbSet<BenefitsData> BenefitsData { get; set; }
 
-        public BenefitsData BenefitsData { get; set; }
+        public IDbSet<Employee> Employees { get; set; }
 
-        public List<Employee> Employees { get; set; }
+        public IDbSet<Dependent> Dependents { get; set; }
 
-        public DatabaseService()
+        public DatabaseService() : base("EmployeeBenefitsCalculator")
         {
-            BenefitsData = CreateBenefitsData();
-            Employees = CreateEmployees();
+            Database.SetInitializer(new DatabaseInitializer());
         }
 
-        private static BenefitsData CreateBenefitsData()
+        public void Save()
         {
-            return new BenefitsData
-            {
-                DiscountAmountForNameBeginningWithA = DiscountAmountForNameBeginningWithA,
-                PaychecksPerYear = PaychecksPerYear,
-                GrossWagesPerPayPeriod = GrossWagesPerPayPeriod,
-                AnnualBenefitCostForEmployee = AnnualBenefitCostForEmployee,
-                AnnualBenefitCostForDependent = AnnualBenefitCostForDependent
-            };
+            this.SaveChanges();
         }
 
-        private List<Employee> CreateEmployees()
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            return new List<Employee>
-                   {
-                       new Employee("Erick", GrossWagesPerPayPeriod, AnnualBenefitCostForEmployee)
-                       {
-                           Id = 1,
-                           Dependents = CreateDependentList("Frances", "Christian", "Harry", "Olive")
-                       },
-                       new Employee("Adam", GrossWagesPerPayPeriod, AnnualBenefitCostForEmployee)
-                       {
-                           Id = 2,
-                           Dependents = CreateDependentList("Jamie", "Cullen", "Gavin")
-                       },
-                       new Employee("Zach", GrossWagesPerPayPeriod, AnnualBenefitCostForEmployee)
-                       {
-                           Id = 3,
-                           Dependents = CreateDependentList("Amy", "Aidan", "Finley")
-                       }
-                   };
-        }
+            base.OnModelCreating(modelBuilder);
 
-        private static List<Dependent> CreateDependentList(params string[] names)
-        {
-            return names
-                .Select(name => new Dependent(name, AnnualBenefitCostForDependent))
-                .ToList();
+            modelBuilder.Configurations.Add(new EmployeeConfiguration());
+            modelBuilder.Configurations.Add(new DependentConfiguration());
         }
-
     }
 }

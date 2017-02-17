@@ -4,6 +4,5 @@
     {
         int Id { get; set; }
         string Name { get; set; }
-        decimal AnnualBenefitCost { get; set; }
     }
 }
